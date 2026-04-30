@@ -1,0 +1,62 @@
+#my-admin,
+#doctor-details,
+#my-animation,
+#doc-appoin,
+#about-sms,
+#Pathology-GeneralSetting,
+#report-formate-1234,
+#patient-report,
+#My-Agents {
+    margin-top: 6px;
+}
+
+#my-admin,
+#Pathology-GeneralSetting {
+    margin-left: 20px;
+}
+
+#my-animation {
+    margin-left: 300px;
+}
+
+#doctor-details {
+    margin-left: 180px;
+}
+
+#doc-appoin {
+    margin-left: 330px;
+
+}
+
+#about-sms {
+    margin-left: 500px;
+}
+
+#about-sms,
+#report-formate-1234 {
+    margin-left: 420px;
+}
+
+#patient-report {
+    margin-left: 610px;
+}
+
+#My-Agents {
+    margin-left: 760px;
+}
+.error-button{
+    background-color: rgb(249, 76, 23);
+    font-size: 22px;
+    padding: 20px;
+    width: auto;
+    text-align: center;
+    margin-left: 700px;
+    margin-top: 40px;
+    cursor: pointer;
+}
+.error-button:hover{
+    background-color: rgb(15, 251, 54);
+    box-shadow: 3px 2px 4px gray;
+    color: black;
+    font-weight: 600;
+}
