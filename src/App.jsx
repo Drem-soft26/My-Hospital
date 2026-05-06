@@ -54,6 +54,9 @@ import Reagent from './Pathology/Reagents/Reagent';
 import InCustom from './ErrorFound';
 import ErrorFound from './ErrorFound';
 import DoctorsInfo from './SubNab/Setting/Doctors/DoctorsInfo';
+import DisplayImg from './General/DisplayImg';
+import ReferrerInfo from './SubNab/Setting/Doctors/ReferrerInfo';
+import MarketingInfo from './SubNab/Setting/Doctors/MarketingInfo';
 function App() {
   return (
 
@@ -77,6 +80,9 @@ function App() {
         <Route path='/ErrorText' element={<ErrorFound/>}/>
          <Route path='/*' element={<ErrorFound/>}/>
          <Route path='/Doctors-Details' element={<DoctorsInfo/>}/>
+         <Route path='/Background-image' element={<DisplayImg/>}/>
+         <Route path='/Referer_info' element={<ReferrerInfo/>}/>
+         <Route path='/Reffer_name' element={<MarketingInfo/>}/>
       </Routes>
     </BrowserRouter>
 

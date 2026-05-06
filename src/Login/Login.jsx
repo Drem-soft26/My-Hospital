@@ -11,7 +11,7 @@ function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const isPasswordValid = password.length >= 3;
     const isNameValid = name.match('abc');
-const isFormValid = isPasswordValid && isNameValid;
+    const isFormValid = isPasswordValid && isNameValid;
     // time & date section 
     const [time, setTime] = useState(
         new Date().toLocaleTimeString('bn-BD').slice(0, 8)
@@ -64,12 +64,12 @@ const isFormValid = isPasswordValid && isNameValid;
                     </div>
 
                     <button
-  disabled={!isFormValid}
-  className={isFormValid ? "active-btn" : "disabled-btn"}
-  onClick={() => navigate("/dashboard")}
->
-  Submit
-</button>
+                        disabled={!isFormValid}
+                        className={isFormValid ? "active-btn" : "disabled-btn"}
+                        onClick={() => navigate("/dashboard")}
+                    >
+                        Submit
+                    </button>
                 </div>
             </div>
         </section>

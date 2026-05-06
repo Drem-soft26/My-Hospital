@@ -5,7 +5,7 @@ function Pathology_Report() {
     return (
         <>
             <Pathhade />
-            <section id='report-formate-1234' className='Diagnosis-Container'>
+            <section id='report-formate-1234' className='Diagnosis-Container '>
                 <div>
                     <ul className='Diagnosis_list'>
                         <li className="report-list">

@@ -23,7 +23,7 @@ function Doctor() {
                             </Link>
                         </li>
                         <li className='report-list'>
-                            <Link className="report-title" to="/Doctor">
+                            <Link className="report-title" to="/Reffer_name">
                                 Marketing Officers Details
                             </Link>
                         </li>
@@ -33,7 +33,7 @@ function Doctor() {
                             </Link>
                         </li>
                         <li className='report-list'>
-                            <Link className="report-title" to="/Doctor">
+                            <Link className="report-title" to="/Referer_info">
                                 Referrer/ PC Doctor Details Ligality Verify
                             </Link>
                         </li>

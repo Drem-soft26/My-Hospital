@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import Client from "../../../Clients/Client";
+import { useNavigate } from "react-router-dom";
 
 export default function DoctorsInfo() {
     const navigate = useNavigate();
@@ -16,15 +16,13 @@ export default function DoctorsInfo() {
     const [feeNew, setFeeNew] = useState("");
     const [feeOld, setFeeOld] = useState("");
 
-    const [selectedIndex, setSelectedIndex] = useState(null);
+    const [selectedId, setSelectedId] = useState(null);
 
-    // 🔥 old data remove
     useEffect(() => {
-        localStorage.removeItem("doctors"); // remove old wrong data
+        localStorage.removeItem("doctors");
         setDoctors([]);
     }, []);
 
-    // Auto ID
     useEffect(() => {
         setId(doctors.length + 1);
     }, [doctors]);
@@ -39,23 +37,26 @@ export default function DoctorsInfo() {
         clearForm();
     };
 
-    // Edit
+    // Edit FIXED 🔥
     const handleEdit = () => {
-        if (selectedIndex === null) return;
+        if (!selectedId) return;
 
-        const updated = [...doctors];
-        updated[selectedIndex] = { id, name, designation, phone, email, feeNew, feeOld };
+        const updated = doctors.map((doc) =>
+            doc.id === selectedId
+                ? { id: selectedId, name, designation, phone, email, feeNew, feeOld }
+                : doc
+        );
 
         setDoctors(updated);
         localStorage.setItem("doctors", JSON.stringify(updated));
         clearForm();
     };
 
-    // Delete
+    // Delete FIXED 🔥
     const handleDelete = () => {
-        if (selectedIndex === null) return;
+        if (!selectedId) return;
 
-        const updated = doctors.filter((_, i) => i !== selectedIndex);
+        const updated = doctors.filter(doc => doc.id !== selectedId);
 
         setDoctors(updated);
         localStorage.setItem("doctors", JSON.stringify(updated));
@@ -63,8 +64,8 @@ export default function DoctorsInfo() {
     };
 
     // Select
-    const handleSelect = (doc, index) => {
-        setSelectedIndex(index);
+    const handleSelect = (doc) => {
+        setSelectedId(doc.id);
         setId(doc.id);
         setName(doc.name);
         setDesignation(doc.designation);
@@ -75,7 +76,7 @@ export default function DoctorsInfo() {
     };
 
     const clearForm = () => {
-        setSelectedIndex(null);
+        setSelectedId(null);
         setName("");
         setDesignation("");
         setPhone("");
@@ -94,29 +95,31 @@ export default function DoctorsInfo() {
 
             <div className="grid grid-cols-3 gap-4 p-4">
 
-                {/* LEFT */}
-                <div
-                    className="col-span-1 border-2 border-cyan-400 p-6 h-max overflow-y-auto shadow-[3px_4px_7px_rgba(0,0,0,0.3)]">
+                {/* LEFT (UNCHANGED) */}
+                <div className="col-span-1 border-2 border-cyan-400 p-6 max-h-[90vh] overflow-y-auto shadow-[3px_4px_7px_rgba(0,0,0,0.3)]">
                     <input
                         className="w-full p-2 border mb-3 rounded"
                         placeholder="Search Doctor..."
                         onChange={(e) => setSearch(e.target.value)}
                     />
+
                     <h4 className="text-2xl font-bold text-center">Name of Doctor's List</h4>
+
                     <ul className="space-y-1">
                         {filteredDoctors.map((doc, i) => (
                             <li
-                                key={i}
-                                onClick={() => handleSelect(doc, i)}
-                                className="p-2 cursor-pointer hover:bg-blue-200 rounded"
+                                key={doc.id}
+                                onClick={() => handleSelect(doc)}
+                                className="p-2 cursor-pointer hover:bg-blue-200 rounded flex gap-2"
                             >
-                                {doc.name}
+                                <span className="font-bold">{i + 1}.</span>
+                                <span>{doc.name}</span>
                             </li>
                         ))}
                     </ul>
                 </div>
 
-                {/* RIGHT */}
+                {/* RIGHT (FIXED UI + SPAN LABELS) */}
                 <div className="col-span-2 border-2 border-cyan-400 p-8">
 
                     <div className="grid grid-cols-2 gap-3">
@@ -165,10 +168,35 @@ export default function DoctorsInfo() {
 
                     {/* BUTTONS */}
                     <div className="grid grid-cols-4 gap-3 mt-6">
-                        <button className="home-button" onClick={handleSave}>Save</button>
-                        <button className="home-button" onClick={handleEdit}>Edit</button>
-                        <button className="home-button" onClick={handleDelete}>Delete</button>
-                        <button className="home-button" onClick={() => navigate(-1)}>Back</button>
+
+                        <button
+                            onClick={handleSave}
+                            className="bg-green-500 text-white p-2 cursor-pointer"
+                        >
+                            Save
+                        </button>
+
+                        <button
+                            onClick={handleEdit}
+                            className="bg-yellow-500 text-white p-2 cursor-pointer"
+                        >
+                            Edit
+                        </button>
+
+                        <button
+                            onClick={handleDelete}
+                            className="bg-red-500 text-white p-2 cursor-pointer"
+                        >
+                            Delete
+                        </button>
+
+                        <button
+                            onClick={() => navigate(-1)}
+                            className="bg-gray-500 text-white p-2 cursor-pointer"
+                        >
+                            Back
+                        </button>
+
                     </div>
 
                 </div>
