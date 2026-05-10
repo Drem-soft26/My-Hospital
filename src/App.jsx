@@ -57,6 +57,9 @@ import DoctorsInfo from './SubNab/Setting/Doctors/DoctorsInfo';
 import DisplayImg from './General/DisplayImg';
 import ReferrerInfo from './SubNab/Setting/Doctors/ReferrerInfo';
 import MarketingInfo from './SubNab/Setting/Doctors/MarketingInfo';
+import DiscountPercentPopup from './SubNab/Admin_Pannel/Permission_And_Others/DiscountPercentPopup';
+import UserAccountCreate from './SubNab/Admin_Pannel/Permission_And_Others/UserAccountCreate';
+import Active_Deactive from './SubNab/Admin_Pannel/Permission_And_Others/Active_Deactive';
 function App() {
   return (
 
@@ -83,6 +86,10 @@ function App() {
          <Route path='/Background-image' element={<DisplayImg/>}/>
          <Route path='/Referer_info' element={<ReferrerInfo/>}/>
          <Route path='/Reffer_name' element={<MarketingInfo/>}/>
+         <Route path='/Discount-page' element={<DiscountPercentPopup/>}/>
+         <Route path='/New_Account_Creat' element={<UserAccountCreate/>}/>
+         <Route path='/Account_Active/Deactive' element={<Active_Deactive/>}/>
+
       </Routes>
     </BrowserRouter>
 
