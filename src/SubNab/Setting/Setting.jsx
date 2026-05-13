@@ -26,7 +26,7 @@ function Setting() {
                         </li>
                         <li className='sub-navigation'>
                             <Link to="/MySms">
-                                About SMS
+                                About SMS and Service charge
                             </Link>
                         </li>
                     </ul>

@@ -10,7 +10,7 @@ export default function GeneralSettings() {
         <div>
           <ul className='Diagnosis_list'>
             <li className="report-list">
-              <Link className="report-title" to="/GeneralSettings">
+              <Link className="report-title" to="/testName-Cost">
                 Diagnosis Test Details
               </Link>
             </li>

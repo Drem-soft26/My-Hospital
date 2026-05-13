@@ -1,6 +1,7 @@
 #Patient_information {
   margin-top: 19px;
   background-color: #fcfaf0;
+  height: 90vh;
 }
 
 body {
@@ -224,6 +225,7 @@ h3 {
 .flex-row {
     flex-wrap: wrap;
 }
+
 
 @media (max-width: 1200px) {
     .select-small {

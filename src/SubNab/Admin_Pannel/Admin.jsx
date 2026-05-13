@@ -15,7 +15,7 @@ function Admin() {
                             </Link>
                         </li>
                         <li className='report-list'>
-                            <Link className="report-title" to="/">
+                            <Link className="report-title" to="/Users_permission">
                                Permission Of Page
                             </Link>
                         </li>

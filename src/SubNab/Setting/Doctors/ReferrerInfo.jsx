@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Client from "../../../Clients/Client";
 import { useNavigate } from "react-router-dom";
 
@@ -8,11 +8,10 @@ export default function ReferrerInfo() {
 
   const [referrers, setReferrers] = useState([]);
   const [search, setSearch] = useState("");
-
   const [selectedId, setSelectedId] = useState(null);
 
   // Basic Info
-  const [id, setId] = useState(1);
+  const [id, setId] = useState(13); // 👈 START FROM 13
   const [name, setName] = useState("");
   const [designation, setDesignation] = useState("");
   const [mobile, setMobile] = useState("");
@@ -34,36 +33,60 @@ export default function ReferrerInfo() {
   const [histopa, setHistopa] = useState("");
   const [others, setOthers] = useState("");
 
-  const filtered = referrers.filter(r =>
-    r.name.toLowerCase().includes(search.toLowerCase())
+  const fixedReferrerNames = [
+    "Rimon",
+    "Sumon",
+    "Jakir",
+    "Nobab Ali",
+    "Self",
+    "Nafiz",
+    "Nayeem",
+    "Roksana",
+    "Rabeya",
+    "Masum",
+    "Momin",
+    "Hospital-Authority"
+  ];
+
+  // ================= LOAD =================
+  useEffect(() => {
+    const stored = localStorage.getItem("referrersData");
+    if (stored) {
+      setReferrers(JSON.parse(stored));
+    }
+  }, []);
+
+  // ================= FILTER =================
+  const filtered = (referrers || []).filter(r =>
+    (r.name || "").toLowerCase().includes(search.toLowerCase())
   );
 
-  // Select
+  // ================= SELECT =================
   const handleSelect = (r) => {
     setSelectedId(r.id);
     setId(r.id);
-    setName(r.name);
-    setDesignation(r.designation);
-    setMobile(r.mobile);
-    setEmail(r.email);
-    setAddress(r.address);
-    setFatherName(r.fatherName);
-    setMotherName(r.motherName);
-    setStatus(r.status);
+    setName(r.name || "");
+    setDesignation(r.designation || "");
+    setMobile(r.mobile || "");
+    setEmail(r.email || "");
+    setAddress(r.address || "");
+    setFatherName(r.fatherName || "");
+    setMotherName(r.motherName || "");
+    setStatus(r.status || "Active");
 
-    setBlood(r.blood);
-    setUrine(r.urine);
-    setStool(r.stool);
-    setUltra(r.ultra);
-    setEcho(r.echo);
-    setEcg(r.ecg);
-    setXray(r.xray);
-    setHormon(r.hormon);
-    setHistopa(r.histopa);
-    setOthers(r.others);
+    setBlood(r.blood || "");
+    setUrine(r.urine || "");
+    setStool(r.stool || "");
+    setUltra(r.ultra || "");
+    setEcho(r.echo || "");
+    setEcg(r.ecg || "");
+    setXray(r.xray || "");
+    setHormon(r.hormon || "");
+    setHistopa(r.histopa || "");
+    setOthers(r.others || "");
   };
 
-  // Clear
+  // ================= CLEAR =================
   const clearForm = () => {
     setSelectedId(null);
     setName("");
@@ -87,10 +110,19 @@ export default function ReferrerInfo() {
     setOthers("");
   };
 
-  // Save
+  // ================= SAVE (FIXED ORDER + ID 13+) =================
   const handleSave = () => {
+
+    const stored = localStorage.getItem("referrersData");
+    const existing = stored ? JSON.parse(stored) : [];
+
+    const nextId =
+      existing.length > 0
+        ? Math.max(...existing.map(r => r.id || 12)) + 1
+        : 13; // 👈 FIRST ID 13
+
     const newData = {
-      id,
+      id: nextId,
       name,
       designation,
       mobile,
@@ -111,51 +143,36 @@ export default function ReferrerInfo() {
       others
     };
 
-    setReferrers([...referrers, newData]);
-    setId(referrers.length + 2);
+    // 👇 ADD TO BOTTOM (NO TOP INSERT)
+    const updatedList = [...existing, newData];
+
+    setReferrers(updatedList);
+    localStorage.setItem("referrersData", JSON.stringify(updatedList));
+
+    setId(nextId + 1);
     clearForm();
   };
 
-  // EDIT FIXED
+  // ================= EDIT =================
   const handleEdit = () => {
     if (!selectedId) return;
 
-    const updated = referrers.map(r =>
-      r.id === selectedId
-        ? {
-          id: selectedId,
-          name,
-          designation,
-          mobile,
-          email,
-          address,
-          fatherName,
-          motherName,
-          status,
-          blood,
-          urine,
-          stool,
-          ultra,
-          echo,
-          ecg,
-          xray,
-          hormon,
-          histopa,
-          others
-        }
-        : r
-    );
+   
 
     setReferrers(updated);
+    localStorage.setItem("referrersData", JSON.stringify(updated));
     clearForm();
   };
 
-  // DELETE FIXED
+  // ================= DELETE =================
   const handleDelete = () => {
     if (!selectedId) return;
 
     const updated = referrers.filter(r => r.id !== selectedId);
+
     setReferrers(updated);
+    localStorage.setItem("referrersData", JSON.stringify(updated));
+
     clearForm();
   };
 
@@ -163,18 +180,22 @@ export default function ReferrerInfo() {
     <>
       <Client />
 
-      <div className="grid grid-cols-3 gap-4 p-4 ">
+      <div className="grid grid-cols-3 gap-4 p-4">
 
-        {/* LEFT (UNCHANGED) */}
+        {/* LEFT */}
         <div className="col-span-1 border p-4 max-h-[90vh] overflow-y-auto shadow-[5px_5px_3px_rgba(0,2,0,0.3)]">
+
           <input
             className="w-full p-2 border mb-3"
             placeholder="Search..."
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          <h3 className="text-center p-3 font-bold text-2xl mb-2">Referrer List</h3>
+          <h3 className="text-center p-3 font-bold text-2xl mb-2">
+            Referrer List
+          </h3>
 
+          {/* DB LIST */}
           {filtered.map((r, i) => (
             <div
               key={r.id}
@@ -185,12 +206,46 @@ export default function ReferrerInfo() {
               <span>{r.name}</span>
             </div>
           ))}
+
+          {/* FIXED LIST */}
+        {/* FIXED + DATABASE MERGED LIST */}
+{[
+  ...referrers.map(r => ({
+    type: "db",
+    id: r.id,
+    name: r.name
+  })),
+  ...fixedReferrerNames.map((name, i) => ({
+    type: "fixed",
+    id: `fixed-${i}`,
+    name
+  }))
+]
+.filter(item =>
+  item.name.toLowerCase().includes(search.toLowerCase())
+)
+.map((item, i) => (
+  <div
+    key={item.id}
+    onClick={() => {
+      if (item.type === "db") {
+        handleSelect(item);
+      } else {
+        setName(item.name);
+      }
+    }}
+    className="p-2 cursor-pointer text-xl hover:bg-red-200 rounded-md hover:font-bold flex gap-2"
+  >
+    <span>{i + 1}.</span>
+    <span>{item.name}</span>
+  </div>
+))}
+
         </div>
 
         {/* RIGHT */}
         <div className="col-span-2 border p-6">
 
-          {/* BASIC INFO */}
           <div className="grid grid-cols-2 gap-3">
 
             <div>
@@ -243,7 +298,8 @@ export default function ReferrerInfo() {
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="border p-2 w-full" >
+                className="border p-2 w-full"
+              >
                 <option>Active</option>
                 <option>Deactive</option>
               </select>
@@ -251,143 +307,36 @@ export default function ReferrerInfo() {
 
           </div>
 
-          {/* TEST SECTION */}
+          {/* TEST */}
           <div className="mt-5 border p-4">
             <h4 className="font-bold mb-2">Test Commission (%)</h4>
 
             <div className="grid grid-cols-4 gap-2">
-
-              {/* Blood */}
-              <div>
-                <span>Blood :</span>
-                <input
-                  value={blood}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (/^\d*\.?\d{0,2}$/.test(val)) setBlood(val);
-                  }}
-                  className="border p-2 w-full"
-                  placeholder="0.00" />
-              </div>
-
-              {/* Urine */}
-              <div>
-                <span>Urine :</span>
-                <input
-                  value={urine}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (/^\d*\.?\d{0,2}$/.test(val)) setUrine(val);
-                  }}
-                  className="border p-2 w-full"
-                  placeholder="0.00" />
-              </div>
-
-              {/* Stool */}
-              <div>
-                <span>Stool :</span>
-                <input
-                  value={stool}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (/^\d*\.?\d{0,2}$/.test(val)) setStool(val);
-                  }}
-                  className="border p-2 w-full"
-                  placeholder="0.00" />
-              </div>
-
-              {/* Ultra */}
-              <div>
-                <span>Ultra :</span>
-                <input
-                  value={ultra}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (/^\d*\.?\d{0,2}$/.test(val)) setUltra(val);
-                  }}
-                  className="border p-2 w-full"
-                  placeholder="0.00"  />
-              </div>
-
-              {/* Echo */}
-              <div>
-                <span>Echo :</span>
-                <input
-                  value={echo}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (/^\d*\.?\d{0,2}$/.test(val)) setEcho(val);
-                  }}
-                  className="border p-2 w-full"
-                  placeholder="0.00" />
-              </div>
-
-              {/* ECG */}
-              <div>
-                <span>ECG :</span>
-                <input
-                  value={ecg}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (/^\d*\.?\d{0,2}$/.test(val)) setEcg(val);
-                  }}
-                  className="border p-2 w-full"
-                  placeholder="0.00"  />
-              </div>
-
-              {/* X-ray */}
-              <div>
-                <span>X-ray :</span>
-                <input
-                  value={xray}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (/^\d*\.?\d{0,2}$/.test(val)) setXray(val);
-                  }}
-                  className="border p-2 w-full"
-                  placeholder="0.00" />
-              </div>
-
-              {/* Hormon */}
-              <div>
-                <span>Hormon :</span>
-                <input
-                  value={hormon}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (/^\d*\.?\d{0,2}$/.test(val)) setHormon(val);
-                  }}
-                  className="border p-2 w-full"
-                  placeholder="0.00"
-                />
-              </div>
-
-              {/* Histopa */}
-              <div>
-                <span>Histopa :</span>
-                <input
-                  value={histopa}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (/^\d*\.?\d{0,2}$/.test(val)) setHistopa(val);
-                  }}
-                  className="border p-2 w-full"
-                  placeholder="0.00" />
-              </div>
-
-              {/* Others */}
-              <div>
-                <span>Others :</span>
-                <input
-                  value={others}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (/^\d*\.?\d{0,2}$/.test(val)) setOthers(val);
-                  }}
-                  className="border p-2 w-full"
-                  placeholder="0.00" />
-              </div>
-
+              {[
+                ["Blood", blood, setBlood],
+                ["Urine", urine, setUrine],
+                ["Stool", stool, setStool],
+                ["Ultra", ultra, setUltra],
+                ["Echo", echo, setEcho],
+                ["ECG", ecg, setEcg],
+                ["Xray", xray, setXray],
+                ["Hormon", hormon, setHormon],
+                ["Histopa", histopa, setHistopa],
+                ["Others", others, setOthers]
+              ].map(([label, value, setter], i) => (
+                <div key={i}>
+                  <span>{label} :</span>
+                  <input
+                    value={value}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (/^\d*\.?\d{0,2}$/.test(val)) setter(val);
+                    }}
+                    className="border p-2 w-full"
+                    placeholder="0.00"
+                  />
+                </div>
+              ))}
             </div>
           </div>
 
@@ -406,10 +355,7 @@ export default function ReferrerInfo() {
               Delete
             </button>
 
-            <button
-              className="bg-gray-500 text-white p-2 cursor-pointer"
-              onClick={() => navigate(-1)}
-            >
+            <button onClick={() => navigate(-1)} className="bg-gray-500 text-white p-2 cursor-pointer">
               Back
             </button>
 

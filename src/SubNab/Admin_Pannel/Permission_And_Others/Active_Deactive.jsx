@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import Client from "../../../Clients/Client";
+import General from "../../../General/General";
 export default function Active_Deactive() {
 
     const navigate = useNavigate();
@@ -49,6 +51,9 @@ export default function Active_Deactive() {
     const currentUser = users.find(u => u.name === selectedUser);
 
     return (
+       <>
+       <Client/>
+       <General/>
         <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
 
             <div className="
@@ -153,5 +158,6 @@ export default function Active_Deactive() {
                 </div>
             </div>
         </div>
+       </>
     );
 }

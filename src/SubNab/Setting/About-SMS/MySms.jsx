@@ -9,6 +9,11 @@ function MySms() {
                 <div>
                     <ul className='Diagnosis_list'>
                         <li className="report-list">
+                            <Link className="report-title" to="/Payment-Method">
+                                About Service charge & Payment Method
+                            </Link>
+                        </li>
+                        <li className="report-list">
                             <Link className="report-title" to="/MySms">
                                 SMS Balance
                             </Link>

@@ -10,45 +10,95 @@ export default function MarketingInfo() {
     const [selectedId, setSelectedId] = useState(null);
 
     const [id, setId] = useState(1);
+
     const [name, setName] = useState("");
+    const [phone, setPhone] = useState("");
+    const [email, setEmail] = useState("");
+    const [fatherName, setFatherName] = useState("");
+    const [motherName, setMotherName] = useState("");
+    const [nid, setNid] = useState("");
+
     const [market, setMarket] = useState("");
+
+    // 🔥 ADD THIS STATE
+    const [search, setSearch] = useState("");
+
+
+    // 🔥 ADD THIS FILTER
+    const filteredData = data.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
+    );
 
     // Auto ID
     useEffect(() => {
         setId(data.length + 1);
     }, [data]);
 
-    const isFormValid = name.trim() !== "" && market.trim() !== "";
+    // ✅ Required Field
+    const isFormValid =
+        name.trim() !== "" &&
+        phone.trim() !== "" &&
+        nid.trim() !== "";
 
     // Save
     const handleSave = () => {
+
         if (!isFormValid) return;
 
         const confirmSave = window.confirm("Do you want to save this?");
         if (!confirmSave) return;
 
-        const newItem = { id, name, market };
+        const newItem = {
+            id,
+            name,
+            phone,
+            email,
+            fatherName,
+            motherName,
+            nid,
+            market
+        };
+
         setData([...data, newItem]);
+
         clearForm();
     };
 
     // Select
     const handleSelect = (item) => {
+
         setSelectedId(item.id);
+
         setId(item.id);
+
         setName(item.name);
+        setPhone(item.phone);
+        setEmail(item.email);
+        setFatherName(item.fatherName);
+        setMotherName(item.motherName);
+        setNid(item.nid);
+
         setMarket(item.market);
     };
 
     // Clear
     const clearForm = () => {
+
         setSelectedId(null);
+
         setName("");
+        setPhone("");
+        setEmail("");
+        setFatherName("");
+        setMotherName("");
+        setNid("");
+
         setMarket("");
     };
 
-    // Edit e 
+    // Edit
     const handleEdit = () => {
+
         if (!selectedId) {
             alert("Please select a record first!");
             return;
@@ -56,16 +106,27 @@ export default function MarketingInfo() {
 
         const updated = data.map((item) =>
             item.id === selectedId
-                ? { id, name, market }
+                ? {
+                    id,
+                    name,
+                    phone,
+                    email,
+                    fatherName,
+                    motherName,
+                    nid,
+                    market
+                }
                 : item
         );
 
         setData(updated);
+
         clearForm();
     };
-    // Detete function 
 
+    // Delete
     const handleDelete = () => {
+
         if (!selectedId) {
             alert("Please select a record first!");
             return;
@@ -75,14 +136,15 @@ export default function MarketingInfo() {
         if (!confirmDelete) return;
 
         const updated = data.filter((item) => item.id !== selectedId);
+
         setData(updated);
+
         clearForm();
     };
 
-
-
-    // ✅ PRINT (A4 সুন্দর layout)
+    // Print
     const handlePrint = () => {
+
         if (!selectedId) {
             alert("Please select a record first!");
             return;
@@ -96,7 +158,9 @@ export default function MarketingInfo() {
     <html>
     <head>
       <title>Print</title>
+
       <style>
+
         @page {
           size: A4;
           margin-top: 2in;
@@ -130,7 +194,9 @@ export default function MarketingInfo() {
         th, td {
           padding: 8px;
         }
+
       </style>
+
     </head>
 
     <body>
@@ -143,9 +209,47 @@ export default function MarketingInfo() {
       <h3 style="text-align:center;">Marketing Officer Info</h3>
 
       <table>
-        <tr><th>ID</th><td>${selectedData.id}</td></tr>
-        <tr><th>Name</th><td>${selectedData.name}</td></tr>
-        <tr><th>Market</th><td>${selectedData.market}</td></tr>
+
+        <tr>
+          <th>ID</th>
+          <td>${selectedData.id}</td>
+        </tr>
+
+        <tr>
+          <th>Name</th>
+          <td>${selectedData.name}</td>
+        </tr>
+
+        <tr>
+          <th>Phone</th>
+          <td>${selectedData.phone}</td>
+        </tr>
+
+        <tr>
+          <th>Email</th>
+          <td>${selectedData.email}</td>
+        </tr>
+
+        <tr>
+          <th>Father Name</th>
+          <td>${selectedData.fatherName}</td>
+        </tr>
+
+        <tr>
+          <th>Mother Name</th>
+          <td>${selectedData.motherName}</td>
+        </tr>
+
+        <tr>
+          <th>NID Number</th>
+          <td>${selectedData.nid}</td>
+        </tr>
+
+        <tr>
+          <th>Market</th>
+          <td>${selectedData.market}</td>
+        </tr>
+
       </table>
 
       <script>
@@ -163,39 +267,115 @@ export default function MarketingInfo() {
         <>
             <Client />
 
-            {/* 🌿 Light Background */}
-            <div className="grid grid-cols-2 gap-6 p-6 bg-gradient-to-br from-blue-50 to-cyan-100 min-h-screen">
+            {/* MAIN */}
+            <div className="
+                grid
+                grid-cols-1
+                lg:grid-cols-2
+                gap-6
+                p-4
+                bg-gradient-to-br
+                from-blue-50
+                to-cyan-100
+                h-[94vh]
+                overflow-hidden
+            ">
+                {/* LEFT Grid colum */}
 
-                {/* LEFT */}
-                <div className="border rounded-xl shadow-md p-4 bg-white">
+                <div className="
+                    border
+                    rounded-xl
+                    shadow-md
+                    p-4
+                    bg-white
+                    flex
+                    flex-col
+                    overflow-hidden
+                ">
 
-                    <h3 className="font-bold mb-2 text-lg text-gray-700">
-                        Marketing Officer Name
+                    <h3 className="
+                        font-extrabold
+                        text-2xl
+                        mb-2
+                        text-gray-700
+                    ">
+                        Marketing Officer's Name:
                     </h3>
 
-                    <div className="border rounded h-[400px] overflow-y-auto p-2">
-                        {data.map((d, i) => (
+                    {/* 🔥 SEARCH BOX */}
+                    <input
+                        type="text"
+                        placeholder="Search Marketing Officer..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="
+            border
+            p-2
+            rounded-lg
+            mb-3
+            focus:outline-blue-400
+        "
+                    />
+                    <div className="
+        border
+        rounded
+        flex-1
+        overflow-y-auto
+        p-2
+    ">
+                        {filteredData.map((d, i) => (
+
                             <div
                                 key={d.id}
                                 onClick={() => handleSelect(d)}
-                                className="cursor-pointer hover:bg-blue-100 p-1 rounded transition"
+                                className="
+                                    cursor-pointer
+                                    hover:bg-green-100
+                                    hover:font-bold
+                                    p-1
+                                    text-blue-800
+                                    text-xl
+                                    rounded
+                                    transition
+                                "
                             >
                                 {i + 1}. {d.name}
                             </div>
-                        ))}
-                    </div>
 
-                    {/* Buttons */}
+                        ))}
+
+                    </div>
+                    {/* BUTTONS */}
                     <button
                         onClick={handlePrint}
-                        className="w-full mt-4 p-2 rounded-lg bg-purple-500 hover:bg-purple-600 cursor-pointer text-white transition"
+                        className="
+                            w-full
+                            mt-4
+                            p-2
+                            rounded-lg
+                            bg-purple-500
+                            hover:bg-purple-600
+                            cursor-pointer
+                            text-white
+                            transition
+                        "
                     >
                         Print
                     </button>
 
                     <button
                         onClick={() => navigate(-1)}
-                        className="w-full mt-2 p-2 rounded-lg bg-red-500 hover:bg-red-600 cursor-pointer text-white transition"
+                        className="
+                            w-full
+                            mt-2
+                            p-2
+                            rounded-lg
+                            bg-red-500
+                            hover:bg-red-600
+                            cursor-pointer
+                            text-white
+                            transition
+                        "
                     >
                         Go Back
                     </button>
@@ -203,68 +383,244 @@ export default function MarketingInfo() {
                 </div>
 
                 {/* RIGHT */}
-                <div className="border rounded-xl shadow-md p-4 bg-white">
+                <div className="
+                    border
+                    rounded-xl
+                    shadow-md
+                    p-4
+                    bg-white
+                    overflow-y-auto
+                ">
 
-                    <div className="space-y-3">
+                    <div className="
+                        grid
+                        grid-cols-1
+                        md:grid-cols-1
+                        gap-3
+                    ">
 
+                        {/* ID */}
                         <div>
-                            <span className="text-sm font-medium">Marketing Officer Id :</span>
-                            <input value={id} readOnly className="border w-full p-2 rounded mt-1" />
-                        </div>
+                            <span className="text-sm font-medium">
+                                Marketing Officer Id :
+                            </span>
 
-                        <div>
-                            <span className="text-sm font-medium">Marketing Officer Name :</span>
                             <input
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                className="border w-full p-2 rounded mt-1 focus:outline-blue-400"
+                                value={id}
+                                readOnly
+                                className="
+                                    border
+                                    w-full
+                                    p-2
+                                    rounded
+                                    mt-1
+                                "
                             />
                         </div>
 
+                        {/* NAME */}
                         <div>
-                            <span className="text-sm font-medium">Market Name :</span>
-                            <textarea
-                                value={market}
-                                onChange={(e) => setMarket(e.target.value)}
-                                className="border w-full p-2 h-24 rounded mt-1 focus:outline-blue-400"
+                            <span className="text-sm font-medium">
+                                Marketing Officer Name :
+                            </span>
+
+                            <input
+                                value={name}
+                                placeholder="Enter Name"
+                                onChange={(e) => setName(e.target.value)}
+                                className="
+                                    border
+                                    w-full
+                                    p-2
+                                    rounded
+                                    mt-1
+                                    focus:outline-blue-400
+                                "
+                            />
+                        </div>
+
+                        {/* PHONE */}
+                        <div>
+                            <span className="text-sm font-medium">
+                                Phone Number :
+                            </span>
+
+                            <input
+                                value={phone}
+                                maxLength={11}
+                                placeholder="01XXXXXXXXX"
+                                onChange={(e) =>
+                                    setPhone(
+                                        e.target.value.replace(/\D/g, "")
+                                    )
+                                }
+                                className="
+                                    border
+                                    w-full
+                                    p-2
+                                    rounded
+                                    mt-1
+                                    focus:outline-blue-400
+                                "
+                            />
+                        </div>
+
+                        {/* NID */}
+                        <div>
+                            <span className="text-sm font-medium">
+                                NID Number :
+                            </span>
+
+                            <input
+                                type="number"
+                                value={nid}
+                                placeholder="Enter NID Number"
+                                onChange={(e) => setNid(e.target.value)}
+                                className="
+                                    border
+                                    w-full
+                                    p-2
+                                    rounded
+                                    mt-1
+                                    focus:outline-blue-400
+                                "
+                            />
+                        </div>
+
+                        {/* FATHER */}
+                        <div>
+                            <span className="text-sm font-medium">
+                                Father Name :
+                            </span>
+
+                            <input
+                                value={fatherName}
+                                placeholder="Father Name"
+                                onChange={(e) => setFatherName(e.target.value)}
+                                className="
+                                    border
+                                    w-full
+                                    p-2
+                                    rounded
+                                    mt-1
+                                    focus:outline-blue-400
+                                "
+                            />
+                        </div>
+
+                        {/* MOTHER */}
+                        <div>
+                            <span className="text-sm font-medium">
+                                Mother Name :
+                            </span>
+
+                            <input
+                                value={motherName}
+                                placeholder="Mother Name"
+                                onChange={(e) => setMotherName(e.target.value)}
+                                className="
+                                    border
+                                    w-full
+                                    p-2
+                                    rounded
+                                    mt-1
+                                    focus:outline-blue-400
+                                "
                             />
                         </div>
 
                     </div>
 
-                    {/* Buttons */}
+                    {/* MARKET */}
+                    <div className="mt-3">
 
+                        <span className="text-sm font-medium">
+                            Market Details :
+                        </span>
 
-                    <div className="grid grid-cols-2 gap-3 mt-6">
+                        <textarea
+                            value={market}
+                            placeholder="Enter Market Details"
+                            onChange={(e) => setMarket(e.target.value)}
+                            className="
+                                border
+                                w-full
+                                p-2
+                                h-24
+                                rounded
+                                mt-1
+                                focus:outline-blue-400
+                            "
+                        />
+
+                    </div>
+
+                    {/* BUTTONS */}
+                    <div className="
+                        grid
+                        grid-cols-2
+                        gap-3
+                        mt-6
+                    ">
 
                         <button
                             onClick={handleSave}
                             disabled={!isFormValid}
-                            className={`p-3 rounded-lg ${isFormValid
+                            className={`
+                                p-3
+                                rounded-lg
+                                transition
+                                cursor-pointer
+                                ${isFormValid
                                     ? "bg-blue-600 hover:bg-blue-700 text-white"
                                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                                }`}
+                                }
+                            `}
                         >
                             Save
                         </button>
 
                         <button
                             onClick={handleEdit}
-                            className="p-3 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-white"
+                            className="
+                                p-3
+                                rounded-lg
+                                bg-yellow-500
+                                hover:bg-yellow-600
+                                text-white
+                                transition
+                                cursor-pointer
+                            "
                         >
                             Edit
                         </button>
 
                         <button
                             onClick={handleDelete}
-                            className="p-3 rounded-lg bg-red-500 hover:bg-red-600 text-white"
+                            className="
+                                p-3
+                                rounded-lg
+                                bg-red-500
+                                hover:bg-red-600
+                                text-white
+                                transition
+                                cursor-pointer
+                            "
                         >
                             Delete
                         </button>
 
                         <button
                             onClick={clearForm}
-                            className="p-3 rounded-lg bg-orange-500 hover:bg-orange-600 text-white"
+                            className="
+                                p-3
+                                rounded-lg
+                                bg-orange-500
+                                hover:bg-orange-600
+                                text-white
+                                transition
+                                cursor-pointer
+                            "
                         >
                             New
                         </button>

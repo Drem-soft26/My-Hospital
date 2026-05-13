@@ -11,7 +11,7 @@ function Dashboard() {
 
   return (
     <>
-      <Client></Client>
+      <Client />
       <General />
       <Outlet />
       <DisplayImg />
