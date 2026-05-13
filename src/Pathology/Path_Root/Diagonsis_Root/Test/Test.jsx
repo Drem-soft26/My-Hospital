@@ -321,7 +321,7 @@ useEffect(() => {
                         </div>
                         <div className="flex items-end">
                             <button
-                                className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                className="px-6 py-2 cursor-pointer bg-red-600 text-white rounded hover:bg-blue-700"
                                 onClick={handlePatientSearch}
                             >
                                 Search
@@ -330,7 +330,7 @@ useEffect(() => {
                     </div>
                     {/* ==================== SEARCH END ==================== */}
 
-                    <h2 className="text-3xl text-center font-bold">Patient Information</h2>
+                    <h2 className="text-2xl text-center text-fuchsia-800 rounded-xl bg-gray-200 p-2 font-bold">Patient Information</h2>
 
                     {/* Name & gender part  */}
                     <div className="form-row">

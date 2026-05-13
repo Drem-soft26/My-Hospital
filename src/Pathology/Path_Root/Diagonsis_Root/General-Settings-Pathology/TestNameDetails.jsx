@@ -625,14 +625,14 @@ const isSaveEnabled =
 
                                 <button
                                     onClick={closePopup}
-                                    className="px-5 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 font-semibold duration-300"
+                                    className="px-5 py-2 rounded-xl bg-slate-400 hover:bg-red-600 hover:cursor-pointer font-semibold duration-300"
                                 >
                                     Cancel
                                 </button>
 
                                 <button
                                     onClick={popup.onConfirm}
-                                    className="px-5 py-2 rounded-xl bg-cyan-600 text-white hover:bg-cyan-800 font-semibold duration-300"
+                                    className="px-5 py-2 rounded-xl bg-cyan-700 text-white hover:cursor-pointer hover:bg-green-600 font-semibold duration-300"
                                 >
                                     Confirm
                                 </button>

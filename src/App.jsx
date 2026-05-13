@@ -15,7 +15,7 @@ import Doctor from './SubNab/Setting/Doctors/Doctor';
 import Admin from './SubNab/Admin_Pannel/Admin';
 import Doc_Appoinment from './SubNab/Setting/Doctors/D-Appoinment/Doc_Appoinment';
 import MySms from './SubNab/Setting/About-SMS/MySms';
-import Pathology_Report from './Pathology/PathReport/Pathology_Report';
+import Pathology_Report from './Pathology/PathReport/Pathology_Report-Format';
 import Report_Part from './Pathology/All-Report/Report_Part';
 import Reagent from './Pathology/Reagents/Reagent';
 import InCustom from './ErrorFound';
@@ -30,6 +30,9 @@ import PermissionPages from './SubNab/Admin_Pannel/Permission_And_Others/Permiss
 import ReferrerInfo from "./SubNab/Setting/Doctors/ReferrerInfo"
 import TestNameDetails from './Pathology/Path_Root/Diagonsis_Root/General-Settings-Pathology/TestNameDetails';
 import PaymentGateway from './SubNab/Payment_Method/PaymentGateway';
+import TestParameterDetails from './Pathology/PathReport/TestParameterDetails';
+import Testingper from './Pathology/PathReport/TestingPer';
+import TestinMethod from './Pathology/PathReport/TestingPer';
 
 
 function App() {
@@ -63,9 +66,12 @@ function App() {
         <Route path='/Account_Active/Deactive' element={<Active_Deactive />} />
         <Route path='/Users_permission' element={<PermissionPages />} />
         <Route path='/testName-Cost' element={<TestNameDetails />} />
-        <Route path='/Payment-Method' element={<PaymentGateway/>} />
-      </Routes>
-    </BrowserRouter>
+        <Route path='/Payment-Method' element={<PaymentGateway />} />
+        <Route path='/Test-ParameterDetails' element={<TestParameterDetails />} />
+        <Route path='/testing' element={<Testingper/>} />
+        
+    </Routes>
+    </BrowserRouter >
 
 
   );

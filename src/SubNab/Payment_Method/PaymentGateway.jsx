@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 const PaymentGateway = () => {
   const navigate = useNavigate();
   
-  const [amount, setAmount] = useState(3500);
-  const [runningMonth, setRunningMonth] = useState("মে");
+  const [amount] = useState(3500);           // Fixed - এখন পরিবর্তন করা যাবে না
+  const [runningMonth] = useState("মে");
 
   const [selectedMethod, setSelectedMethod] = useState(null);
   const [paymentDetails, setPaymentDetails] = useState({});
@@ -53,24 +53,31 @@ const PaymentGateway = () => {
       provider: option.name,
       number: '01683493858',
     });
+    setTransactionId('');
   };
 
   const handleSelectCard = (option) => {
     setSelectedMethod('card');
     setPaymentDetails({ type: 'card', provider: option.name });
+    setTransactionId('');
   };
 
   const handleCash = () => {
     setSelectedMethod('cash');
     setPaymentDetails({ type: 'cash', provider: 'Cash on Delivery' });
+    setTransactionId('');
   };
 
   const handlePaymentConfirm = async () => {
     setLoading(true);
     await new Promise(resolve => setTimeout(resolve, 1200));
 
-    const txId = 'TX' + Date.now().toString().slice(-8);
-    setTransactionId(txId);
+    let finalTxId = transactionId.trim();
+    if (!finalTxId) {
+      finalTxId = 'TX' + Date.now().toString().slice(-8);
+    }
+
+    setTransactionId(finalTxId);
     setIsSuccess(true);
     setLoading(false);
   };
@@ -97,11 +104,9 @@ const PaymentGateway = () => {
             <p className="text-sm tracking-wider">{runningMonth} মাসের পেমেন্ট</p>
             <div className="flex items-baseline justify-center gap-2 mt-1">
               <span className="text-4xl sm:text-5xl">৳</span>
-              <input 
-                type="number" 
-                value={amount} 
-                className="bg-blend-overlay text-4xl sm:text-5xl font-bold w-32 sm:w-40 text-center" 
-              />
+              <span className="text-4xl sm:text-5xl font-bold select-none">
+                {amount}
+              </span>
             </div>
           </div>
         </div>
@@ -201,8 +206,9 @@ const PaymentGateway = () => {
                   <input
                     type="text"
                     placeholder="Transaction ID দিন"
-                    className="w-full px-5 py-4 border rounded-2xl focus:outline-none focus:border-pink-400 text-center text-lg"
+                    value={transactionId}
                     onChange={(e) => setTransactionId(e.target.value)}
+                    className="w-full px-5 py-4 border rounded-2xl focus:outline-none focus:border-pink-400 text-center text-lg"
                   />
 
                   <button
@@ -235,9 +241,10 @@ const PaymentGateway = () => {
               {paymentDetails.type === 'cash' && (
                 <button
                   onClick={handlePaymentConfirm}
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-4 rounded-2xl text-lg transition-all active:scale-95 cursor-pointer"
+                  disabled={loading}
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-4 rounded-2xl text-lg transition-all active:scale-95 disabled:opacity-70 cursor-pointer"
                 >
-                  Confirm Cash Payment
+                  {loading ? "প্রসেসিং..." : "Confirm Cash Payment"}
                 </button>
               )}
             </div>
@@ -249,10 +256,10 @@ const PaymentGateway = () => {
       {isSuccess && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-3 sm:p-4">
           <div id="receipt" className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden">
-            <div className="bg-gradient-to-r from-emerald-300 to-teal-400 text-white p-8 text-center">
+            <div className="bg-gradient-to-r from-emerald-500 to-teal-500 text-black p-8 text-center">
               <div className="mx-auto w-24 h-24 bg-white/20 rounded-full flex items-center justify-center text-6xl mb-4">✅</div>
               <h2 className="text-3xl font-bold">পেমেন্ট সফল হয়েছে!</h2>
-              <p className="text-emerald-100 mt-1">TX ID: {transactionId}</p>
+              <p className="text-blue-700 mt-1">TX ID: <span className="font-mono text-xl font-bold">{transactionId}</span></p>
             </div>
 
             <div className="p-8 space-y-6">
@@ -271,10 +278,16 @@ const PaymentGateway = () => {
             </div>
 
             <div className="flex gap-3 p-6 border-t">
-              <button onClick={handlePrintReceipt} className="flex-1 bg-gray-900 text-white py-4 rounded-2xl font-semibold cursor-pointer hover:bg-green-500">
+              <button 
+                onClick={handlePrintReceipt} 
+                className="flex-1 bg-gray-900 text-white py-4 rounded-2xl font-semibold cursor-pointer hover:bg-emerald-700 transition-colors"
+              >
                 🖨️ Print Receipt
               </button>
-              <button onClick={resetAll} className="flex-1 border bg-gray-500 py-4 rounded-2xl font-semibold cursor-pointer hover:bg-red-600">
+              <button 
+                onClick={resetAll} 
+                className="flex-1 border bg-gray-900 text-white py-4 rounded-2xl font-semibold cursor-pointer hover:bg-red-600 transition-colors"
+              >
                 Close
               </button>
             </div>

@@ -9,7 +9,7 @@ function Pathology_Report() {
                 <div>
                     <ul className='Diagnosis_list'>
                         <li className="report-list">
-                            <Link className="report-title" to="/Pathology_Report">
+                            <Link className="report-title" to="/Test-ParameterDetails">
                                 Diagnosis Test Details
                             </Link>
                         </li>
@@ -19,7 +19,7 @@ function Pathology_Report() {
                             </Link>
                         </li>
                         <li className="report-list">
-                            <Link className="report-title" to="/Pathology_Report">
+                            <Link className="report-title" to="/testing">
                                 Diagnosis Report Generate Formate One
                             </Link>
                         </li>
