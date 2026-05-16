@@ -33,9 +33,9 @@ function General() {
           <Link className="front-nab" to="/ErrorText">About Expenses</Link>
         </li>
 
-        <li className="main-nab-container">
+        {/* <li className="main-nab-container">
           <Link className="front-nab" to="/ErrorText">About Account</Link>
-        </li>
+        </li> */}
 
       </ul>
     </div>

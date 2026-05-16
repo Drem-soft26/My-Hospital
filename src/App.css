@@ -6,9 +6,10 @@
 #Pathology-GeneralSetting,
 #report-formate-1234,
 #patient-report,
+#about-account-drop,
 #My-Agents {
     margin-top: 5px;
-    
+
 }
 
 #my-admin,
@@ -42,10 +43,12 @@
     margin-left: 610px;
 }
 
-#My-Agents {
+#My-Agents,
+#about-account-drop {
     margin-left: 760px;
 }
-.error-button{
+
+.error-button {
     background-color: rgb(227, 57, 6);
     font-size: 22px;
     padding: 20px;
@@ -55,7 +58,8 @@
     margin-top: 40px;
     cursor: pointer;
 }
-.error-button:hover{
+
+.error-button:hover {
     background-color: rgb(6, 232, 44);
     box-shadow: 3px 2px 4px gray;
     color: black;

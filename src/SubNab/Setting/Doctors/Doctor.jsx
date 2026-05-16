@@ -18,7 +18,7 @@ function Doctor() {
                         </li>
 
                         <li className='report-list'>
-                            <Link className="report-title" to="/">
+                            <Link className="report-title" to="/Doctor">
                                 Doctor Details For Report Generate
                             </Link>
                         </li>

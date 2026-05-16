@@ -29,6 +29,11 @@ function Setting() {
                                 About SMS and Service charge
                             </Link>
                         </li>
+                        <li className='sub-navigation'>
+                            <Link to="/Daily_paymet/Book">
+                                About Account Summary
+                            </Link>
+                        </li>
                     </ul>
                 </div>
             </section>

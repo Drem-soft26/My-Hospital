@@ -33,6 +33,11 @@ import PaymentGateway from './SubNab/Payment_Method/PaymentGateway';
 import TestParameterDetails from './Pathology/PathReport/TestParameterDetails';
 import Testingper from './Pathology/PathReport/TestingPer';
 import TestinMethod from './Pathology/PathReport/TestingPer';
+import PayBookDropdow from './SubNab/Account_Expencess-Summery/PayBookDropdow';
+import ReceivePaymentIndoor from './SubNab/Account_Expencess-Summery/ReceivePaymentIndoor';
+import TestAccount from './SubNab/Account_Expencess-Summery/TestAccount';
+import SearchofTest from './Pathology/Path_Root/Diagonsis_Root/Test/SearchofTest';
+import DueCollection from './Pathology/Path_Root/Diagonsis_Root/Test/DueCollection';
 
 
 function App() {
@@ -69,6 +74,11 @@ function App() {
         <Route path='/Payment-Method' element={<PaymentGateway />} />
         <Route path='/Test-ParameterDetails' element={<TestParameterDetails />} />
         <Route path='/testing' element={<Testingper/>} />
+        <Route path='/Daily_paymet/Book' element={<PayBookDropdow/>}/>
+        <Route path='/Indoor-Summary' element={<ReceivePaymentIndoor/>}/>
+        <Route path='/Testing-data' element={<TestAccount/>}/>
+        <Route path='/SearchAndEdit/Test' element={<SearchofTest/>}/>
+        <Route path='/Due-Collection' element={<DueCollection/>}/>
         
     </Routes>
     </BrowserRouter >

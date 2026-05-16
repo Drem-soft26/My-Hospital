@@ -11,7 +11,7 @@ export default function ReferrerInfo() {
   const [selectedId, setSelectedId] = useState(null);
 
   // Basic Info
-  const [id, setId] = useState(13); // 👈 START FROM 13
+  const [id, setId] = useState(1);
   const [name, setName] = useState("");
   const [designation, setDesignation] = useState("");
   const [mobile, setMobile] = useState("");
@@ -33,38 +33,34 @@ export default function ReferrerInfo() {
   const [histopa, setHistopa] = useState("");
   const [others, setOthers] = useState("");
 
-  const fixedReferrerNames = [
-    "Rimon",
-    "Sumon",
-    "Jakir",
-    "Nobab Ali",
-    "Self",
-    "Nafiz",
-    "Nayeem",
-    "Roksana",
-    "Rabeya",
-    "Masum",
-    "Momin",
-    "Hospital-Authority"
-  ];
-
   // ================= LOAD =================
   useEffect(() => {
     const stored = localStorage.getItem("referrersData");
+
     if (stored) {
-      setReferrers(JSON.parse(stored));
+      const parsed = JSON.parse(stored);
+
+      setReferrers(parsed);
+
+      if (parsed.length > 0) {
+        const nextId =
+          Math.max(...parsed.map((r) => r.id || 12)) + 1;
+
+        setId(nextId);
+      }
     }
   }, []);
 
   // ================= FILTER =================
-  const filtered = (referrers || []).filter(r =>
+  const filtered = (referrers || []).filter((r) =>
     (r.name || "").toLowerCase().includes(search.toLowerCase())
   );
 
   // ================= SELECT =================
   const handleSelect = (r) => {
     setSelectedId(r.id);
-    setId(r.id);
+
+    setId(r.id || 1);
     setName(r.name || "");
     setDesignation(r.designation || "");
     setMobile(r.mobile || "");
@@ -87,8 +83,11 @@ export default function ReferrerInfo() {
   };
 
   // ================= CLEAR =================
-  const clearForm = () => {
+  const clearForm = (nextId = 1) => {
     setSelectedId(null);
+
+    setId(nextId);
+
     setName("");
     setDesignation("");
     setMobile("");
@@ -110,16 +109,19 @@ export default function ReferrerInfo() {
     setOthers("");
   };
 
-  // ================= SAVE (FIXED ORDER + ID 13+) =================
+  // ================= SAVE =================
   const handleSave = () => {
 
+    if (!name.trim()) return;
+
     const stored = localStorage.getItem("referrersData");
+
     const existing = stored ? JSON.parse(stored) : [];
 
     const nextId =
       existing.length > 0
-        ? Math.max(...existing.map(r => r.id || 12)) + 1
-        : 13; // 👈 FIRST ID 13
+        ? Math.max(...existing.map((r) => r.id ||0)) + 1
+        : 1;
 
     const newData = {
       id: nextId,
@@ -143,37 +145,87 @@ export default function ReferrerInfo() {
       others
     };
 
-    // 👇 ADD TO BOTTOM (NO TOP INSERT)
+    // ADD TO BOTTOM
     const updatedList = [...existing, newData];
 
     setReferrers(updatedList);
-    localStorage.setItem("referrersData", JSON.stringify(updatedList));
 
-    setId(nextId + 1);
-    clearForm();
+    localStorage.setItem(
+      "referrersData",
+      JSON.stringify(updatedList)
+    );
+
+    clearForm(nextId + 1);
   };
 
   // ================= EDIT =================
   const handleEdit = () => {
+
     if (!selectedId) return;
 
-   
+    const updated = referrers.map((r) =>
+      r.id === selectedId
+        ? {
+            ...r,
+            name,
+            designation,
+            mobile,
+            email,
+            address,
+            fatherName,
+            motherName,
+            status,
+            blood,
+            urine,
+            stool,
+            ultra,
+            echo,
+            ecg,
+            xray,
+            hormon,
+            histopa,
+            others
+          }
+        : r
+    );
 
     setReferrers(updated);
-    localStorage.setItem("referrersData", JSON.stringify(updated));
-    clearForm();
+
+    localStorage.setItem(
+      "referrersData",
+      JSON.stringify(updated)
+    );
+
+    const nextId =
+      updated.length > 0
+        ? Math.max(...updated.map((r) => r.id || 0)) + 1
+        : 1;
+
+    clearForm(nextId);
   };
 
   // ================= DELETE =================
   const handleDelete = () => {
+
     if (!selectedId) return;
 
-    const updated = referrers.filter(r => r.id !== selectedId);
+    const updated = referrers.filter(
+      (r) => r.id !== selectedId
+    );
 
     setReferrers(updated);
-    localStorage.setItem("referrersData", JSON.stringify(updated));
 
-    clearForm();
+    localStorage.setItem(
+      "referrersData",
+      JSON.stringify(updated)
+    );
+
+    const nextId =
+      updated.length > 0
+        ? Math.max(...updated.map((r) => r.id || 0)) + 1
+        : 1;
+
+    clearForm(nextId);
   };
 
   return (
@@ -188,6 +240,7 @@ export default function ReferrerInfo() {
           <input
             className="w-full p-2 border mb-3"
             placeholder="Search..."
+            value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
 
@@ -195,7 +248,7 @@ export default function ReferrerInfo() {
             Referrer List
           </h3>
 
-          {/* DB LIST */}
+          {/* DATABASE LIST */}
           {filtered.map((r, i) => (
             <div
               key={r.id}
@@ -207,40 +260,6 @@ export default function ReferrerInfo() {
             </div>
           ))}
 
-          {/* FIXED LIST */}
-        {/* FIXED + DATABASE MERGED LIST */}
-{[
-  ...referrers.map(r => ({
-    type: "db",
-    id: r.id,
-    name: r.name
-  })),
-  ...fixedReferrerNames.map((name, i) => ({
-    type: "fixed",
-    id: `fixed-${i}`,
-    name
-  }))
-]
-.filter(item =>
-  item.name.toLowerCase().includes(search.toLowerCase())
-)
-.map((item, i) => (
-  <div
-    key={item.id}
-    onClick={() => {
-      if (item.type === "db") {
-        handleSelect(item);
-      } else {
-        setName(item.name);
-      }
-    }}
-    className="p-2 cursor-pointer text-xl hover:bg-red-200 rounded-md hover:font-bold flex gap-2"
-  >
-    <span>{i + 1}.</span>
-    <span>{item.name}</span>
-  </div>
-))}
-
         </div>
 
         {/* RIGHT */}
@@ -250,54 +269,103 @@ export default function ReferrerInfo() {
 
             <div>
               <span>ID :</span>
-              <input value={id} readOnly className="border p-2 w-full" />
+
+              <input
+                value={id}
+                readOnly
+                className="border p-2 w-full"
+              />
             </div>
 
             <div>
               <span>Name :</span>
-              <input value={name} onChange={(e) => setName(e.target.value)} className="border p-2 w-full" />
+
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="border p-2 w-full"
+              />
             </div>
 
             <div>
               <span>Designation :</span>
-              <input value={designation} onChange={(e) => setDesignation(e.target.value)} className="border p-2 w-full" />
+
+              <input
+                value={designation}
+                onChange={(e) =>
+                  setDesignation(e.target.value)
+                }
+                className="border p-2 w-full"
+              />
             </div>
 
             <div>
               <span>Mobile :</span>
+
               <input
                 value={mobile}
                 maxLength={11}
-                onChange={(e) => setMobile(e.target.value.replace(/\D/g, ""))}
+                onChange={(e) =>
+                  setMobile(
+                    e.target.value.replace(/\D/g, "")
+                  )
+                }
                 className="border p-2 w-full"
               />
             </div>
 
             <div>
               <span>Email :</span>
-              <input value={email} onChange={(e) => setEmail(e.target.value)} className="border p-2 w-full" />
+
+              <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="border p-2 w-full"
+              />
             </div>
 
             <div>
               <span>Address :</span>
-              <input value={address} onChange={(e) => setAddress(e.target.value)} className="border p-2 w-full" />
+
+              <input
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="border p-2 w-full"
+              />
             </div>
 
             <div>
               <span>Father Name :</span>
-              <input value={fatherName} onChange={(e) => setFatherName(e.target.value)} className="border p-2 w-full" />
+
+              <input
+                value={fatherName}
+                onChange={(e) =>
+                  setFatherName(e.target.value)
+                }
+                className="border p-2 w-full"
+              />
             </div>
 
             <div>
               <span>Mother Name :</span>
-              <input value={motherName} onChange={(e) => setMotherName(e.target.value)} className="border p-2 w-full" />
+
+              <input
+                value={motherName}
+                onChange={(e) =>
+                  setMotherName(e.target.value)
+                }
+                className="border p-2 w-full"
+              />
             </div>
 
             <div className="col-span-2">
               <span>Status :</span>
+
               <select
                 value={status}
-                onChange={(e) => setStatus(e.target.value)}
+                onChange={(e) =>
+                  setStatus(e.target.value)
+                }
                 className="border p-2 w-full"
               >
                 <option>Active</option>
@@ -309,9 +377,13 @@ export default function ReferrerInfo() {
 
           {/* TEST */}
           <div className="mt-5 border p-4">
-            <h4 className="font-bold mb-2">Test Commission (%)</h4>
+
+            <h4 className="font-bold mb-2">
+              Test Commission (%)
+            </h4>
 
             <div className="grid grid-cols-4 gap-2">
+
               {[
                 ["Blood", blood, setBlood],
                 ["Urine", urine, setUrine],
@@ -325,37 +397,59 @@ export default function ReferrerInfo() {
                 ["Others", others, setOthers]
               ].map(([label, value, setter], i) => (
                 <div key={i}>
+
                   <span>{label} :</span>
+
                   <input
                     value={value}
                     onChange={(e) => {
+
                       const val = e.target.value;
-                      if (/^\d*\.?\d{0,2}$/.test(val)) setter(val);
+
+                      if (
+                        /^\d*\.?\d{0,2}$/.test(val)
+                      ) {
+                        setter(val);
+                      }
                     }}
                     className="border p-2 w-full"
                     placeholder="0.00"
                   />
+
                 </div>
               ))}
+
             </div>
           </div>
 
           {/* BUTTONS */}
           <div className="grid grid-cols-4 gap-3 mt-6">
 
-            <button onClick={handleSave} className="bg-green-500 text-white p-2 cursor-pointer">
+            <button
+              onClick={handleSave}
+              className="bg-green-500 text-white p-2 cursor-pointer"
+            >
               Save
             </button>
 
-            <button onClick={handleEdit} className="bg-yellow-500 text-white p-2 cursor-pointer">
+            <button
+              onClick={handleEdit}
+              className="bg-yellow-500 text-white p-2 cursor-pointer"
+            >
               Edit
             </button>
 
-            <button onClick={handleDelete} className="bg-red-500 text-white p-2 cursor-pointer">
+            <button
+              onClick={handleDelete}
+              className="bg-red-500 text-white p-2 cursor-pointer"
+            >
               Delete
             </button>
 
-            <button onClick={() => navigate(-1)} className="bg-gray-500 text-white p-2 cursor-pointer">
+            <button
+              onClick={() => navigate(-1)}
+              className="bg-gray-500 text-white p-2 cursor-pointer"
+            >
               Back
             </button>
 
